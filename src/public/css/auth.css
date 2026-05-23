@@ -1,0 +1,37 @@
+.auth-form__heading {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.entry__name {
+    margin-top: 30px;
+    font-weight: bold;
+}
+
+.auth__form {
+    max-width: 27%;
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+}
+
+.auth__input {
+    height: 27px;
+}
+
+.auth__button {
+    background-color: black;
+    margin: 50px 0;
+    height: 30px;
+    color: white;
+    font-size: 15px;
+}
+
+.auth__button:hover {
+    background-color: rgb(87, 87, 87);
+}
+
+.link {
+    display: block;
+    text-align: center;
+}

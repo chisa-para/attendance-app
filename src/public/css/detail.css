@@ -1,0 +1,92 @@
+body {
+    background-color: rgb(243, 243, 243);
+}
+
+.attendance-detail__content {
+    width: 70%;
+    margin: 50px auto;
+}
+
+.attendance-detail__heading {
+    border-left: solid 7px black;
+    padding: 0 8px;
+}
+
+.attendance-detail-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    width: 100%;
+    height: auto;
+}
+
+.table {
+    background-color: white;
+    border: solid 1px rgb(243, 243, 243);
+    border-radius: 20px;
+    width: 100%;
+}
+
+.table__row {
+    height: 90px;
+    border-bottom: solid 5px rgb(243, 243, 243);
+}
+
+.table__head {
+    padding-left: 80px;
+    padding-right: 80px;
+    text-align: left;
+    color: rgb(123, 123, 123);
+}
+
+.detail__input--fixed , .detail__input {
+    width: 150px;
+    height: 30px;
+    margin: 5px 70px;
+    padding: 5px 10px;
+    font-size: 17px;
+}
+
+.detail__input--fixed {
+    border: none;
+    font-weight: bold;
+}
+
+.detail__input {
+    border: solid 1px rgb(172, 172, 172);
+    border-radius: 2px;
+}
+
+.detail__textarea {
+    margin: 5px 70px;
+    padding: 5px 10px;
+    border: solid 1px rgb(172, 172, 172);
+    border-radius: 2px;
+    font-size: 15px;
+}
+
+
+.form-button {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.approval-button {
+    background-color: black;
+    width: 80px;
+    margin-right: 25px;
+    padding: 7px 12px;
+    border: none;
+    color: white;
+    font-size: 15px;
+}
+
+.approval-button:hover {
+    background-color: rgb(117, 117, 117);
+}

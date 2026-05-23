@@ -1,0 +1,159 @@
+body {
+    background-color: rgb(243, 243, 243);
+}
+
+.attendance-list__content {
+    width: 70%;
+    margin: 50px auto;
+}
+
+.attendance-list__heading {
+    border-left: solid 7px black;
+    padding: 0 8px;
+}
+
+.attendance-list-day , .attendance-list-month {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border: solid 1px rgb(243, 243, 243);
+    border-radius: 10px;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+}
+
+.attendance-list-day , .attendance-list-month {
+    color: inherit;
+}
+
+.last-day , .next-day , .last-month , .next-month {
+    text-decoration: none;
+    margin: auto 10px;
+    font-weight: bold;
+    color: rgb(105, 105, 105);
+}
+
+.arrow-left {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 3px;
+    margin: 5.7px 5px 4.5px;
+    border-radius: 9999px;
+    background-color: rgb(105, 105, 105);
+}
+
+.arrow-left::before,
+.arrow-left::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 1.5px);
+    left: 0;
+    width: 11px;
+    height: 3px;
+    border-radius: 9999px;
+    background-color: rgb(105, 105, 105);
+    transform-origin: 1.5px 50%;
+}
+
+.arrow-left::before {
+    transform: rotate(45deg);
+}
+
+.arrow-left::after {
+    transform: rotate(-45deg);
+}
+
+.arrow-right {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 3px;
+    margin: 5.7px 5px 4.5px;
+    border-radius: 9999px;
+    background-color: rgb(105, 105, 105);
+}
+
+.arrow-right::before,
+.arrow-right::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 1.5px);
+    right: 0;
+    width: 11px;
+    height: 3px;
+    border-radius: 9999px;
+    background-color: rgb(105,
+        105,
+        105);
+    transform-origin: calc(100% - 1.5px) 50%;
+}
+
+.arrow-right::before {
+    transform: rotate(45deg);
+}
+
+.arrow-right::after {
+    transform: rotate(-45deg);
+}
+
+.attendance-list-table {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.table {
+    background-color: white;
+    border: solid 1px rgb(243, 243, 243);
+    border-radius: 10px;
+    width: 100%;
+}
+
+.table__row {
+    height: 60px;
+    border-bottom: solid 5px rgb(243, 243, 243);
+}
+
+.table__head,
+.table__data {
+    text-align: center;
+    padding: 5px 30px;
+    color: rgb(105, 105, 105);
+}
+
+.table__data--detail {
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+.table__data--detail a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.export-form {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.export-button {
+    background-color: black;
+    width: 100px;
+    padding: 7px 12px;
+    border: none;
+    color: white;
+    font-size: 15px;
+}
+
+.export-button:hover {
+    background-color: rgb(117, 117, 117);
+}

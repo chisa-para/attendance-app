@@ -1,0 +1,49 @@
+body {
+    background-color: rgb(243, 243, 243);
+}
+
+.attendance-record__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    margin: 150px auto;
+    
+}
+
+.attendance-status {
+    background-color: rgb(178, 178, 178);
+    border: solid 1px rgb(178, 178, 178);
+    border-radius: 50px;
+    margin: 5px auto;
+    padding: 5px 10px;
+}
+
+.date {
+    margin: 20px auto 10px;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.time {
+    margin: 10px auto 30px;
+    font-size: 70px;
+    font-weight: bold;
+}
+
+.attendance-button {
+    background-color: black;
+    width: 130px;
+    margin: 10px auto 30px;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.attendance-button:hover {
+    background-color: rgb(117, 117, 117);
+}
