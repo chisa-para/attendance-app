@@ -10,7 +10,7 @@
     <div class="auth-form__heading">
         <h1>会員登録</h1>
     </div>
-    <form action="/register" method="post" class="auth__form">
+    <form action="/register" method="post" class="auth__form" novalidate>
         @csrf
         <label for="name" class="entry__name">ユーザ名</label>
         <input name="name" id="name" type="text" class="auth__input" value="{{ old('name') }}">
@@ -19,8 +19,8 @@
             {{ $message }}
             @enderror
         </div>
-        <label for="mail" class="entry__name">メールアドレス</label>
-        <input name="email" id="mail" type="email" class="auth__input" value="{{ old('email') }}">
+        <label for="email" class="entry__name">メールアドレス</label>
+        <input name="email" id="email" type="email" class="auth__input" value="{{ old('email') }}">
         <div class="form__error">
             @error('email')
             {{ $message }}

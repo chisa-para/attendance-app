@@ -1,5 +1,3 @@
-
-
 <header class="header">  
     <div class="header-logo-group">
         <a href="/" class="header-logo-link">
@@ -7,18 +5,18 @@
         </a>
     </div>
     @if( !in_array(Route::currentRouteName(), ['register', 'login', 'verification.notice']) )
-    <nav class="header__nav">
-        <ul>
+    <nav class="header__navi">
+        <ul class="header__navi-ul">
             @auth
-                @if(Auth::user()->is_admin)
-                <li><a href="/admin/attendance/list">勤怠一覧</a></li>
-                <li><a href="/admin/staff/list">スタッフ一覧</a></li>
-                <li><a href="/stamp_correction_request/list">申請一覧</a></li>
+                @if(Auth::user()->admin_status)
+                <li><a class="header__navi-item" href="/admin/attendance/list">勤怠一覧</a></li>
+                <li><a class="header__navi-item" href="/admin/staff/list">スタッフ一覧</a></li>
+                <li><a class="header__navi-item" href="/stamp_correction_request/list">申請一覧</a></li>
                 @else
-                <li><a href="/attendance/list">勤怠</a></li>
-                <li><a href="/attendance/list">勤怠一覧</a></li>
-                <li><a href="/stamp_correction_request/list">申請</a></li>
-                <li><a href="">レポート未</a></li>
+                <li><a class="header__navi-item" href="/attendance">勤怠</a></li>
+                <li><a class="header__navi-item" href="/attendance/list">勤怠一覧</a></li>
+                <li><a class="header__navi-item" href="/stamp_correction_request/list">申請</a></li>
+                <li><a class="header__navi-item" href="">レポート未</a></li>
                 @endif
                 <li>
                     <form action="/logout" method="post">

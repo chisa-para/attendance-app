@@ -35,3 +35,8 @@
     display: block;
     text-align: center;
 }
+
+.form__error {
+    color: red;
+    font-size: 13px;
+}

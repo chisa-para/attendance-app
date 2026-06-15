@@ -11,34 +11,51 @@
     <div class="approval-form">
         <form action="" class="form">
             @csrf
+            @method('PATCH')
             <table class="table">
                 <tr class="table__row">
                     <th class="table__head">名前</th>
-                    <td class="table__data">西怜奈</td>
+                    <td class="table__data">{{ $approvalRequest->attendance->user->name }}</td>
                     
                 </tr>
                 <tr class="table__row">
                     <th class="table__head">日付</th>
-                    <td class="table__data">2023年6月1日</td>
-                    
+                    <td class="table__data">{{ $date }}</td>
                 </tr>
                 <tr class="table__row">
                     <th class="table__head">出勤・退勤</th>
-                    <td class="table__data">9:00<span>～</span>18:00</td>
+                    <td class="table__data">
+                        {{ $start }}
+                        <input type="hidden" class="detail__input--fixed" name="start_at" value="{{ $start }}" readonly>
+                        <span>～</span>
+                        {{ $finish }}
+                        <input type="hidden" class="detail__input--fixed" name="finish_at" value="{{ $finish }}" readonly>
+                    </td>
                     
                 </tr>
+                @foreach($rests as $index => $rest)
                 <tr class="table__row">
-                    <th class="table__head">休憩</th>
-                    <td class="table__data">12:00<span>～</span>13:00</td>
-                    
+                    <th class="table__head">休憩{{ $index + 1 }}</th>
+
+                    @if($rest->id)
+                    <input type="hidden" name="rests[{{ $index }}][id]" value="{{ $rest->id }}">
+                    @endif
+
+                    <td class="table__data">
+                        {{ $rest->request_rest_start_at ? \Carbon\Carbon::parse($rest->request_rest_start_at)->format('H:i') : '' }}
+                        <input type="hidden" class="detail__input" name="request_rest_start_at" value="{{ $rest->request_rest_start_at ? \Carbon\Carbon::parse($rest->request_rest_start_at)->format('H:i') : '' }}">
+                        <span>～</span>
+                        {{ $rest->request_rest_finish_at ? \Carbon\Carbon::parse($rest->request_rest_finish_at)->format('H:i') : '' }}
+                        <input type="hidden" class="detail__input" name="request_rest_finish_at" value="{{ $rest->request_rest_finish_at ? \Carbon\Carbon::parse($rest->request_rest_finish_at)->format('H:i') : '' }}">
+                    </td>
                 </tr>
-                <tr class="table__row">
-                    <th class="table__head">休憩２</th>
-                    <td class="table__data"></td>
-                </tr>
+                @endforeach
                 <tr class="table__row">
                     <th class="table__head">備考</th>
-                    <td class="table__data">hiddenのinputをつけるのを忘れずに</td>
+                    <td class="table__data">
+                        {{ $approvalRequest->reason }}
+                        <input type="hidden" class="detail__input--fixed" name="finish_at" value="{{ $approvalRequest->reason }}" readonly>
+                    </td>
                 </tr>
             </table>
             <div class="form-button">

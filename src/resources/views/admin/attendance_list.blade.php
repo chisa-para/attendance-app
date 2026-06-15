@@ -9,9 +9,9 @@
 <div class="attendance-list__content">
     <h1 class="attendance-list__heading">勤怠一覧</h1>
     <div class="attendance-list-day">
-        <a href="" class="last-day"><span class="arrow-left"></span>前日</a>
-        <h2 class="month">2023/06/01</h2>
-        <a href="" class="next-day">翌日<span class="arrow-right"></span></a>
+        <a href="{{ route('admin.attendance.list', ['day' => $prevDate]) }}" class="last-day"><span class="arrow-left"></span>前日</a>
+        <h2 class="month">{{ $displayDate }}</h2>
+        <a href="{{ route('admin.attendance.list', ['day' => $nextDate]) }}" class="next-day">翌日<span class="arrow-right"></span></a>
     </div>
     <div class="attendance-list-table">
         <table class="table">
@@ -23,14 +23,16 @@
                 <th class="table__head">合計</th>  
                 <th class="table__head">詳細</th>  
             </tr>
+            @foreach($attendances as $attendance)
             <tr class="table__row">
-                <td class="table__data">西怜奈</td>
-                <td class="table__data">9:00</td>
-                <td class="table__data">18:00</td>
-                <td class="table__data">1:00</td>
-                <td class="table__data">8:00</td>
-                <td class="table__data--detail"><a href="">詳細</a></td>
+                <td class="table__data">{{ $attendance->user->name }}</td>
+                <td class="table__data">{{ $attendance->start_at ? $attendance->start_at->format('H:i') : '-' }}</td>
+                <td class="table__data">{{ $attendance->finish_at ? $attendance->finish_at->format('H:i') : '-' }}</td>
+                <td class="table__data">{{ $attendance->display_total_rest_time }}</td>
+                <td class="table__data">{{ $attendance->actual_work_time }}</td>
+                <td class="table__data--detail"><a href="{{ route('admin.attendance.detail', ['attendance_id' => $attendance['id']]) }}">詳細</a></td>
             </tr>
+            @endforeach
         </table>
     </div>
 </div>

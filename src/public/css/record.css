@@ -32,18 +32,33 @@ body {
     font-weight: bold;
 }
 
-.attendance-button {
-    background-color: black;
+.attendance-button , .attendance-button__rest {
     width: 130px;
-    margin: 10px auto 30px;
+    margin: 10px 10px 30px 10px;
     padding: 10px 30px;
-    border: none;
+    border: solid 1px black;
     border-radius: 10px;
-    color: white;
     font-size: 18px;
     font-weight: bold;
 }
 
+.attendance-button {
+    background-color: black;
+    color: white;
+}
+
+.attendance-button__rest {
+    background-color: rgb(255, 255, 255);
+}
+
 .attendance-button:hover {
     background-color: rgb(117, 117, 117);
+}
+
+.attendance-button__rest:hover {
+    color: rgb(117, 117, 117);
+}
+
+.attendance_button--working {
+    display: flex;
 }

@@ -8,5 +8,26 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
 
+.header__navi-ul {
+    display: flex;
+    color: white;
+    font-size: 18px;
+}
+
+.header__navi-item {
+    list-style: none;
+    text-decoration: none;
+    margin: auto 10px;
+    color: inherit;
+}
+
+.header__logout {
+    background-color: black;
+    margin-right: 25px;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
 }
