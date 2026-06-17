@@ -40,3 +40,48 @@
     color: red;
     font-size: 13px;
 }
+
+/* verify-email.blade.php対応 */
+.email__resend {
+    background-color: rgb(219, 255, 212);
+    color: green;
+}
+.mail__text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 100px;
+}
+
+.mail-guidance1 , .mail-guidance2 {
+    margin: 3px;
+}
+
+.mail-guidance2 {
+    margin-bottom: 50px;
+}
+
+.mail__verify-button {
+    background-color: rgb(224, 224, 224);
+    text-decoration: none;
+    border: solid 1px black;
+    padding: 10px;
+    border-radius: 5px;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.mail__verify-button:hover {
+    background-color: rgb(184, 184, 184);
+}
+
+.email__resend-button {
+    background-color: white;
+    margin-top: 30px;
+    border: none;
+    color: rgb(46, 46, 255);
+    font-size: 15px;
+    cursor: pointer;
+}

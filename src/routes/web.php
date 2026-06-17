@@ -8,6 +8,8 @@ use App\Http\Controllers\AdminStaffController;
 use App\Http\Controllers\AdminApprovalController;
 use App\Http\Middleware\AdminOnly;
 use App\Http\Middleware\GeneralOnly;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 //一般ミドルウェア
 Route::middleware(['auth', GeneralOnly::class])->group(function (){
@@ -57,6 +59,24 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/stamp_correction_request/list', [ApprovalRequestController::class, 'index'])
         ->name('request.list');
 });
+
+//メール認証ルート
+// 1. 認証メール送信後の確認画面の表示
+Route::get('/email/verify', function () {
+    return view('general.auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+// 2. メール内のリンクをクリックした時の処理（検証完了）
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill(); // これが認証完了の魔法のメソッドです
+    return redirect('/attendance'); // 💡 認証後に飛ばしたい場所（マイページなど）に変更してください
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// 3. 認証メールの再送処理
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return redirect()->route('verification.notice')->with('status', 'verification-link-sent');
+    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 //Route::get('/register', function () {
   //  return view('general.auth.register');

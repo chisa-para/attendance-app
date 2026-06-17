@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Contracts\RegisterResponse;
 
 
 class FortifyServiceProvider extends ServiceProvider
@@ -91,6 +92,12 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::registerView(function () {
             return view('general.auth.register');
         });
+
+        $this->app->instance(RegisterResponse::class, new class implements RegisterResponse {
+            public function toResponse($request){
+                return view('general.auth.verify-email');
+            }
+        });
         //Fortify::loginView(function () {
             //return view('general.auth.login');
         //});
@@ -104,37 +111,54 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::authenticateUsing(function (Request $request) {
-            
             // 1. 管理者ログイン
             if ($request->is('admin/*') || $request->is('admin')) {
-                $admin = User::where('email', $request->email)->whereIn('admin_status', [true, 1, 'true'])->first();
+                $admin = User::where('email', $request->email)
+                ->whereIn('admin_status', [true, 1, 'true'])
+                ->first();
 
-                if ($admin && Hash::check($request->password, $admin->password)) {
-                    return $admin;
-                }
-
-                if (!Hash::check($request->input('password'), $admin->password)) {
-                    throw ValidationException::withMessages([
-                        'password' => ['パスワードが間違っています。'],
-                    ]);
-                }
-            } 
-            // 2. 一般ユーザーログイン
-            else {
-            $user = User::where('email', $request->email)->whereIn('admin_status', [false, 0, 'false'])->first();
-
-                if ($user && Hash::check($request->password, $user->password)) {
-                    return $user;
-                }
-
-                if (!Hash::check($request->input('password'), $user->password)) {
-                    throw ValidationException::withMessages([
-                        'password' => ['パスワードが間違っています。'],
-                    ]);
-                }
+            // ユーザーが存在しない、またはパスワードが違う場合
+            if (!$admin || !Hash::check($request->password, $admin->password)) {
+                throw ValidationException::withMessages([
+                    'email' => ['メールアドレスまたはパスワードが間違っています。'],
+                ]);
             }
 
-            return null;
+            // 【追加】メール認証が済んでいない場合
+            if (is_null($admin->email_verified_at)) {
+                throw ValidationException::withMessages([
+                    'email' => ['メール認証が完了していません。送付されたメールをご確認ください。'],
+                ]);
+            }
+
+            return $admin;
+
+            } 
+    
+            // 2. 一般ユーザーログイン
+            else {
+                $user = User::where('email', $request->email)
+                ->whereIn('admin_status', [false, 0, 'false'])
+                ->first();
+
+            // ユーザーが存在しない、またはパスワードが違う場合
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'email' => ['メールアドレスまたはパスワードが間違っています。'],
+                ]);
+            }
+
+            // 【追加】メール認証が済んでいない場合
+            if (is_null($user->email_verified_at)) {
+                throw ValidationException::withMessages([
+                    'email' => ['メール認証が完了していません。送付されたメールをご確認ください。'],
+                ]);
+            }
+
+            return $user;
+            }
+
+        return null;
         });
         
     }
