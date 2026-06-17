@@ -32,7 +32,7 @@
                 <td class="table__data">{{ $attendance['working_time'] }}</td>
                 <td class="table__data--detail">
                     @if(!empty($attendance['id']))
-                        <a href="{{ route('attendance.detail', ['attendance_id' => $attendance['id']]) }}">詳細</a>
+                        <a href="{{ route('attendance.detail', ['attendance_id' => $attendance['id'],'from' => 'attendance']) }}">詳細</a>
                     @else
                         <p>詳細</p>
                     @endif

@@ -12,7 +12,7 @@ class ApprovalRequest extends Model
     protected $fillable = [
         'attendance_id',
         'reason',
-        'status_id',
+        'status',
         'request_start_at',
         'request_finish_at',
     ];

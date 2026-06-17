@@ -30,19 +30,14 @@
                 <tr class="table__row">
                     <th class="table__head">出勤・退勤</th>
                     <td class="table__data">
-                        <input type="text" class="detail__input" name="request_start_at" value="{{ old('request_start_at', $start) }}">
+                        <input type="time" class="detail__input" name="request_start_at" value="{{ old('request_start_at', $start) }}">
                         <span>～</span>
-                        <input type="text" class="detail__input" name="request_finish_at" value="{{ old('request_finish_at', $finish) }}">
+                        <input type="time" class="detail__input" name="request_finish_at" value="{{ old('request_finish_at', $finish) }}">
+                        @if ($errors->has('request_start_at') || $errors->has('request_finish_at'))
                         <div class="form__error" style="color: red; padding: 10px;">
-                            @error('request_start_at')
-                            {{ $message }}
-                            @enderror
+                            {{ $errors->first('request_start_at') ?? $errors->first('request_finish_at') }}
                         </div>
-                        <div class="form__error" style="color: red; padding: 10px;">
-                            @error('request_finish_at')
-                            {{ $message }}
-                            @enderror
-                        </div>
+                        @endif
                     </td>
                 </tr>
                 @foreach($rests as $index => $rest)
@@ -54,31 +49,31 @@
                     @endif
 
                     <td class="table__data">
-                        <input type="text" class="detail__input" name="rests[{{ $index }}][request_rest_start_at]" value="{{ old("rests.{$index}.request_rest_start_at",$rest->rest_start_at ? \Carbon\Carbon::parse($rest->rest_start_at)->format('H:i') : '') }}">
+                        <input type="time" class="detail__input" name="rests[{{ $index }}][request_rest_start_at]" value="{{ old("rests.{$index}.request_rest_start_at",$rest->rest_start_at ? \Carbon\Carbon::parse($rest->rest_start_at)->format('H:i') : '') }}">
                         <span>～</span>
-                        <input type="text" class="detail__input" name="rests[{{ $index }}][request_rest_finish_at]" value="{{ old("rests.{$index}.request_rest_finish_at",$rest->rest_finish_at ? \Carbon\Carbon::parse($rest->rest_finish_at)->format('H:i') : '') }}">
+                        <input type="time" class="detail__input" name="rests[{{ $index }}][request_rest_finish_at]" value="{{ old("rests.{$index}.request_rest_finish_at",$rest->rest_finish_at ? \Carbon\Carbon::parse($rest->rest_finish_at)->format('H:i') : '') }}">
+
+                        @if ($errors->has("rests.{$index}.request_rest_start_at") || $errors->has("rests.{$index}.request_rest_finish_at"))
                         <div class="form__error" style="color: red; padding: 10px;">
-                            @error("rests.{$index}.request_rest_start_at")
-                            {{ $message }}
-                            @enderror
+                            {{ $errors->first("rests.{$index}.request_rest_start_at") ?? $errors->first("rests.{$index}.request_rest_finish_at") }}
                         </div>
-                        <div class="form__error" style="color: red; padding: 10px;">
-                            @error("rests.{$index}.request_rest_finish_at")
-                            {{ $message }}
-                            @enderror
-                        </div>
+                        @endif
                     </td>
                 </tr>
                 @endforeach
                 <tr class="table__row">
                     <th class="table__head">備考</th>
                     <td class="table__data">
+                        @if(!$retouch_reason)
                         <textarea type="text" class="detail__textarea" name="reason" cols="57" rows="10" placeholder="修正理由を記述してください" >{{ old('reason') }}</textarea>
                         <div class="form__error" style="color: red; padding: 10px;">
                             @error('reason')
                             {{ $message }}
                             @enderror
                         </div>
+                        @else
+                        <textarea type="text" class="detail__textarea" name="reason" cols="57" rows="10" placeholder="修正理由を記述してください" >{{ old('reason') }}</textarea>
+                        @endif
                     </td>
                 </tr>
             </table>

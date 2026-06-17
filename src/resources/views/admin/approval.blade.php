@@ -9,7 +9,7 @@
 <div class="approval__content">
     <h1 class="approval__heading">勤怠詳細</h1>
     <div class="approval-form">
-        <form action="" class="form">
+        <form action="{{ route('approval.update', ['attendance_correct_request_id' => $id]) }}" class="form" method="post">
             @csrf
             @method('PATCH')
             <table class="table">

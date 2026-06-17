@@ -7,11 +7,11 @@
 @section('content')
 @include('components.header')
 <div class="attendance-list__content">
-    <h1 class="attendance-list__heading">西怜奈さんの勤怠</h1>
+    <h1 class="attendance-list__heading">{{ $user->name }}さんの勤怠</h1>
     <div class="attendance-list-month">
-        <a href="" class="last-month"><span class="arrow-left"></span>前月</a>
-        <h2 class="month">2023/06</h2>
-        <a href="" class="next-month">翌月<span class="arrow-right"></span></a>
+        <a href="{{ route('admin.attendance.month', ['user_id' => $user->id, 'month' => $prevMonth]) }}" class="last-month"><span class="arrow-left"></span>前月</a>
+        <h2 class="month">{{ $targetMonth->format('Y年m月') }}</h2>
+        <a href="{{ route('admin.attendance.month', ['user_id' => $user->id, 'month' => $nextMonth]) }}" class="next-month">翌月<span class="arrow-right"></span></a>
     </div>
     <div class="attendance-list-table">
         <table class="table">
@@ -23,14 +23,22 @@
                 <th class="table__head">合計</th>  
                 <th class="table__head">詳細</th>  
             </tr>
+            @foreach($attendanceList as $attendance)
             <tr class="table__row">
-                <td class="table__data">06/01(木)</td>
-                <td class="table__data">9:00</td>
-                <td class="table__data">18:00</td>
-                <td class="table__data">1:00</td>
-                <td class="table__data">8:00</td>
-                <td class="table__data--detail"><a href="/attendance/detail">詳細</a></td>
+                <td class="table__data">{{ $attendance['date'] }}</td>
+                <td class="table__data">{{ $attendance['start_at'] }}</td>
+                <td class="table__data">{{ $attendance['finish_at'] }}</td>
+                <td class="table__data">{{ $attendance['rest_time'] }}</td>
+                <td class="table__data">{{ $attendance['working_time'] }}</td>
+                <td class="table__data--detail">
+                    @if(!empty($attendance['id']))
+                        <a href="{{ route('admin.attendance.detail', ['attendance_id' => $attendance['id']]) }}">詳細</a>
+                    @else
+                        <p>詳細</p>
+                    @endif
+                </td>
             </tr>
+            @endforeach
         </table>
     </div>
     <form action="/admin/export" class="export-form">

@@ -43,7 +43,7 @@
                     @if(Auth::user()->admin_status)
                         <a href="{{ route('approval.detail', ['attendance_correct_request_id' => $requestItem->id]) }}">詳細</a>
                     @else
-                        <a href="{{ route('attendance.detail', ['attendance_id' => $requestItem->attendance_id]) }}">詳細</a>
+                        <a href="{{ route('attendance.detail', ['attendance_id' => $requestItem->attendance_id,'from' => 'approval']) }}">詳細</a>
                     @endif
                 </td>
             </tr>

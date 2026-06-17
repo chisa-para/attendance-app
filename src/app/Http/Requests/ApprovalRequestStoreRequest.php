@@ -38,26 +38,26 @@ class ApprovalRequestStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'request_start_at.required'   => '出勤時刻は必須項目です。',
-            'request_start_at.date_format'=> '出勤時刻は「時:分」の形式で入力してください。',
-            'request_start_at.before'     => '出勤時刻は退勤時刻よりも前の時刻を入力してください。',
+            'request_start_at.required'   => '出勤時間は必須項目です。',
+            'request_start_at.date_format'=> '出勤時間は「時:分」の形式で入力してください。',
+            'request_start_at.before'     => '出勤時間もしくは退勤時間が不適切な値です',
             
-            'request_finish_at.required'  => '退勤時刻は必須項目です。',
-            'request_finish_at.date_format'=> '出勤時刻は「時:分」の形式で入力してください。',
-            'request_finish_at.after'     => '退勤時刻は出勤時刻よりも後の時刻を設定してください。',
+            'request_finish_at.required'  => '退勤時間は必須項目です。',
+            'request_finish_at.date_format'=> '出勤時間は「時:分」の形式で入力してください。',
+            'request_finish_at.after'     => '出勤時間もしくは退勤時間が不適切な値です',
             
             'reason.required'               => '備考を記入してください。',
 
-            'rests.*.request_rest_start_at.required_with'    => '休憩開始時刻を入力してください。',
-            'rests.*.request_rest_start_at.date_format'    => '休憩時刻は「時:分」の形式で入力してください。',
-            'rests.*.request_rest_start_at.after'    => '休憩時刻は出勤時刻よりも後の時刻を入力してください。',
-            'rests.*.request_rest_start_at.before'    =>'休憩時刻は退勤時刻よりも前の時刻を入力してください。',
+            'rests.*.request_rest_start_at.required_with'    => '休憩開始時間を入力してください。',
+            'rests.*.request_rest_start_at.date_format'    => '休憩時間は「時:分」の形式で入力してください。',
+            'rests.*.request_rest_start_at.after'    => '休憩時間が不適切な値です',
+            'rests.*.request_rest_start_at.before'    =>'休憩時間が不適切な値です',
 
             
-            'rests.*.request_rest_finish_at.required_with'    => '休憩終了時刻を入力してください。',
-            'rests.*.request_rest_finish_at.date_format'    => '休憩時刻は「時:分」の形式で入力してください。',
-            'rests.*.request_rest_finish_at.after'    => '休憩終了時刻は休憩開始時刻よりも後の時刻を入力してください。',
-            'rests.*.request_rest_finish_at.before'    => '休憩終了時刻は退勤時刻よりも前の時刻を入力してください。',
+            'rests.*.request_rest_finish_at.required_with'    => '休憩終了時間を入力してください。',
+            'rests.*.request_rest_finish_at.date_format'    => '休憩時間は「時:分」の形式で入力してください。',
+            'rests.*.request_rest_finish_at.after'    => '休憩時間が不適切な値です',
+            'rests.*.request_rest_finish_at.before'    => '休憩時間もしくは退勤時間が不適切な値です',
         ];
     }
     

@@ -40,14 +40,16 @@ Route::middleware(['auth', AdminOnly::class])->group(function () {
 
         Route::get('/attendance/{attendance_id}', [AdminAttendanceController::class, 'show'])->name('attendance.detail');
 
+        Route::patch('/attendance/{attendance_id}', [AdminAttendanceController::class, 'update'])->name('attendance.update');
+
         Route::get('/staff/list', [AdminStaffController::class, 'index'])->name('staff.list');
 
-        Route::get('/attendance/staff', function () {
-            return view('admin.each_attendance_list');
-        });
+        Route::get('/attendance/staff/{user_id}', [AdminAttendanceController::class, 'monthIndex'])->name('attendance.month');
     });
 
     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}',  [AdminApprovalController::class, 'show'])->name('approval.detail');
+
+    Route::patch('/stamp_correction_request/approve/{attendance_correct_request_id}',  [AdminApprovalController::class, 'update'])->name('approval.update');
     });
 
 //共通ミドルウェア

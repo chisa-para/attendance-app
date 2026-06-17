@@ -19,7 +19,7 @@
             <tr class="table__row">
                 <td class="table__data">{{ $member->name }}</td>
                 <td class="table__data">{{ $member->email }}</td>
-                <td class="table__data--detail"><a href="">詳細</a></td>
+                <td class="table__data--detail"><a href="{{ route('admin.attendance.month', ['user_id' => $member['id']]) }}">詳細</a></td>
             </tr>
             @endforeach
         </table>

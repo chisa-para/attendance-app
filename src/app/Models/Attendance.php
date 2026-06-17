@@ -14,6 +14,7 @@ class Attendance extends Model
         'user_id',
         'start_at',
         'finish_at',
+        'retouch_reason'
     ];
 
     protected $casts = [

@@ -9,7 +9,7 @@
 <div class="attendance-detail__content">
     <h1 class="attendance-detail__heading">勤怠詳細</h1>
     <div class="attendance-detail-form">
-        <form action="" class="form">
+        <form action="{{ route('admin.attendance.update', ['attendance_id' => $attendance['id']]) }}" class="form" method="post">
             @csrf
             @method('PATCH')
             <table class="table">
@@ -52,7 +52,7 @@
                     @endif
 
                     <td class="table__data">
-                        <input type="text" class="detail__input" name="rests[{{ $index }}][rest_start_at]" value="{{ old("rests.{$index}.rest_start_at",$rest->rest_start_at ? \Carbon\Carbon::parse($rest->rest_finish_at)->format('H:i') : '') }}">
+                        <input type="text" class="detail__input" name="rests[{{ $index }}][rest_start_at]" value="{{ old("rests.{$index}.rest_start_at",$rest->rest_start_at ? \Carbon\Carbon::parse($rest->rest_start_at)->format('H:i') : '') }}">
                         <span>～</span>
                         <input type="text" class="detail__input" name="rests[{{ $index }}][rest_finish_at]" value="{{ old("rests.{$index}.rest_finish_at",$rest->rest_finish_at ? \Carbon\Carbon::parse($rest->rest_finish_at)->format('H:i') : '') }}">
                         <div class="form__error" style="color: red; padding: 10px;">
@@ -71,7 +71,16 @@
                 <tr class="table__row">
                     <th class="table__head">備考</th>
                     <td class="table__data">
+                        @if(!$attendance->retouch_reason)
                         <textarea type="text" class="detail__textarea" name="reason" cols="72" rows="10" placeholder="修正理由を記述してください" >{{ old('reason') }}</textarea>
+                        <div class="form__error" style="color: red; padding: 10px;">
+                            @error('reason')
+                            {{ $message }}
+                            @enderror
+                        </div>
+                        @else
+                        <textarea type="text" class="detail__textarea" name="reason" cols="72" rows="10">{{ old('reason',$attendance->retouch_reason) }}</textarea>
+                        @endif
                     </td>
                 </tr>
             </table>

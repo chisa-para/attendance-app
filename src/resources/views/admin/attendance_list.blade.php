@@ -23,14 +23,23 @@
                 <th class="table__head">合計</th>  
                 <th class="table__head">詳細</th>  
             </tr>
-            @foreach($attendances as $attendance)
+            @foreach($users as $user)
             <tr class="table__row">
-                <td class="table__data">{{ $attendance->user->name }}</td>
-                <td class="table__data">{{ $attendance->start_at ? $attendance->start_at->format('H:i') : '-' }}</td>
-                <td class="table__data">{{ $attendance->finish_at ? $attendance->finish_at->format('H:i') : '-' }}</td>
-                <td class="table__data">{{ $attendance->display_total_rest_time }}</td>
-                <td class="table__data">{{ $attendance->actual_work_time }}</td>
-                <td class="table__data--detail"><a href="{{ route('admin.attendance.detail', ['attendance_id' => $attendance['id']]) }}">詳細</a></td>
+                <td class="table__data">{{ $user->name }}</td>
+                @php
+                $attendance = $user->attendances->first(); 
+                @endphp
+                <td class="table__data">{{ $attendance?->start_at ? $attendance->start_at->format('H:i') : '-' }}</td>
+                <td class="table__data">{{ $attendance?->finish_at ? $attendance->finish_at->format('H:i') : '-' }}</td>
+                <td class="table__data">{{ $attendance?->display_total_rest_time }}</td>
+                <td class="table__data">{{ $attendance?->actual_work_time }}</td>
+                <td class="table__data--detail">
+                    @if($attendance)
+                    <a href="{{ route('admin.attendance.detail', ['attendance_id' => $attendance['id']]) }}">詳細</a>
+                    @else
+                    <p>詳細</p>
+                    @endif
+                </td>
             </tr>
             @endforeach
         </table>

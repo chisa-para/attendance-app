@@ -37,7 +37,10 @@ class ApprovalRequestController extends Controller
                                 ->where('status', 'waiting')
                                 ->exists();
 
-        return view('general.attendance_detail', compact('user','date','start','finish','attendance','rests','isPending'));
+        $from = $request->input('from', '');
+        
+
+        return view('general.attendance_detail', compact('user','date','start','finish','attendance','rests','isPending','from'));
     }
 
     public function store($id, ApprovalRequestStoreRequest $request)
