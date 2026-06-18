@@ -16,7 +16,7 @@
                 <li><a class="header__navi-item" href="/attendance">勤怠</a></li>
                 <li><a class="header__navi-item" href="/attendance/list">勤怠一覧</a></li>
                 <li><a class="header__navi-item" href="/stamp_correction_request/list">申請</a></li>
-                <li><a class="header__navi-item" href="">レポート未</a></li>
+                <li><a class="header__navi-item" href="{{ route('attendance.report') }}">レポート</a></li>
                 @endif
                 <li>
                     <form action="/logout" method="post">

@@ -122,7 +122,7 @@ class AttendanceController extends Controller
         $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
-            // ループ処理中の日付インスタンスを作成（例: 2026-05-01）
+            // ループ処理中の日付インスタンスを作成（Y-m-d）
             $currentDate = $targetMonth->copy()->day($day);
             $dateKey = $currentDate->format('Y-m-d'); // 検索用のキー
             $dayOfWeek = $weekdays[$currentDate->dayOfWeek]; // 曜日
@@ -144,24 +144,13 @@ class AttendanceController extends Controller
                 $start = Carbon::parse($attendance->start_at);
                 $finish = $attendance->finish_at ? Carbon::parse($attendance->finish_at) : null;
 
-                // --- 休憩時間の合計（分）を計算 ---
-                $totalRestMinutes = 0;
-                foreach ($attendance->rests as $rest) {
-                    if ($rest->rest_start_at && $rest->rest_finish_at) {
-                        $totalRestMinutes += Carbon::parse($rest->rest_start_at)->diffInMinutes(Carbon::parse($rest->rest_finish_at));
-                    }
-                }
+                // 休憩時間の合計（分）
+                $totalRestMinutes = $attendance->total_rest_minutes;
 
-                // --- 実働時間の計算 ---
-                $workingTimeStr = '-';
-                if ($finish) {
-                    $totalMinutes = $start->diffInMinutes($finish);
-                    $actualMinutes = $totalMinutes - $totalRestMinutes;
-                    if ($actualMinutes > 0) {
-                        $workingTimeStr = sprintf('%02d:%02d', floor($actualMinutes / 60), $actualMinutes % 60);
-                    }
-                }
+                // 実働時間
+                $workingTimeStr = $attendance->actual_work_time;
 
+                //休憩時間を60→01:00表記にする
                 $restTimeStr = sprintf('%02d:%02d', floor($totalRestMinutes / 60), $totalRestMinutes % 60);
 
                 // 空欄だった枠に、計算したデータを上書き（マッピング）

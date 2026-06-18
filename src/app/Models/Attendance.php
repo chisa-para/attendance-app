@@ -44,7 +44,7 @@ class Attendance extends Model
         }
         return $totalMinutes;
     }
-
+    
     /**
      * 実働時間（文字列）を計算するアクセサ
      */
@@ -75,4 +75,19 @@ class Attendance extends Model
         $minutes = $this->total_rest_minutes % 60;
         return sprintf('%02d:%02d', $hours, $minutes);
     }
+
+    /**
+ * 実働時間（分単位の数値）を返すアクセサ（集計用）
+ */
+public function getActualWorkMinutesAttribute()
+{
+    if (!$this->start_at || !$this->finish_at) {
+        return 0;
+    }
+
+    $totalMinutes = $this->start_at->diffInMinutes($this->finish_at);
+    $actualMinutes = $totalMinutes - $this->total_rest_minutes;
+
+    return $actualMinutes < 0 ? 0 : $actualMinutes;
+}
 }

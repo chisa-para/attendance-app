@@ -1,0 +1,73 @@
+
+.attendance-report__content {
+    width: 70%;
+    margin: 50px auto;
+}
+
+.attendance-report__heading {
+    border-left: solid 7px black;
+    padding: 0 8px;
+}
+
+.attendance-report__explain {
+    font-weight: bold;
+}
+
+.attendance-report__second-heading {
+    font-size: 20px;
+}
+
+.attendance-report-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-display {
+    background-color: rgb(242, 242, 242);
+    border: solid 1px rgb(210, 210, 210);
+    border-radius: 3px;
+    width: 33%;
+    margin: 5px 5px;
+    padding: 2px 10px ;
+}
+
+.result-heading {
+    color: rgb(91, 91, 91);
+    font-size: 13px;
+}
+
+.result-content {
+    margin: 5px 10px;
+    font-weight: bold;
+}
+
+.table {
+    width: 100%;
+}
+
+.table__head,
+.table__head--month {
+    text-align: left;
+    padding-left: 10px;
+    border-bottom: solid 1px rgb(210, 210, 210);
+}
+
+.table__head {
+    width: 25%;
+    height: 45px;
+}
+
+.table__data {
+    height: 45px;
+    padding-left: 13px;
+    border-bottom: solid 1px rgb(210, 210, 210);
+    font-weight: bolder;
+}
+
+.attendance-report__supplement {
+    margin: 5px 10px;
+    color: rgb(91, 91, 91);
+    font-size: 13px;
+    font-weight: bold;
+}

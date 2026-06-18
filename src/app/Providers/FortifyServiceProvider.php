@@ -124,13 +124,6 @@ class FortifyServiceProvider extends ServiceProvider
                 ]);
             }
 
-            // 【追加】メール認証が済んでいない場合
-            if (is_null($admin->email_verified_at)) {
-                throw ValidationException::withMessages([
-                    'email' => ['メール認証が完了していません。送付されたメールをご確認ください。'],
-                ]);
-            }
-
             return $admin;
 
             } 
@@ -145,13 +138,6 @@ class FortifyServiceProvider extends ServiceProvider
             if (!$user || !Hash::check($request->password, $user->password)) {
                 throw ValidationException::withMessages([
                     'email' => ['メールアドレスまたはパスワードが間違っています。'],
-                ]);
-            }
-
-            // 【追加】メール認証が済んでいない場合
-            if (is_null($user->email_verified_at)) {
-                throw ValidationException::withMessages([
-                    'email' => ['メール認証が完了していません。送付されたメールをご確認ください。'],
                 ]);
             }
 

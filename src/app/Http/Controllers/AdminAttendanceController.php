@@ -152,23 +152,11 @@ class AdminAttendanceController extends Controller
                 $start = Carbon::parse($attendance->start_at);
                 $finish = $attendance->finish_at ? Carbon::parse($attendance->finish_at) : null;
 
-                // --- 休憩時間の合計（分）を計算 ---
-                $totalRestMinutes = 0;
-                foreach ($attendance->rests as $rest) {
-                    if ($rest->rest_start_at && $rest->rest_finish_at) {
-                        $totalRestMinutes += Carbon::parse($rest->rest_start_at)->diffInMinutes(Carbon::parse($rest->rest_finish_at));
-                    }
-                }
+                // 休憩時間
+                $totalRestMinutes = $attendance->total_rest_minutes;
 
-                // --- 実働時間の計算 ---
-                $workingTimeStr = '-';
-                if ($finish) {
-                    $totalMinutes = $start->diffInMinutes($finish);
-                    $actualMinutes = $totalMinutes - $totalRestMinutes;
-                    if ($actualMinutes > 0) {
-                        $workingTimeStr = sprintf('%02d:%02d', floor($actualMinutes / 60), $actualMinutes % 60);
-                    }
-                }
+                // 実働時間
+                $workingTimeStr = $attendance->actual_work_time;
 
                 $restTimeStr = sprintf('%02d:%02d', floor($totalRestMinutes / 60), $totalRestMinutes % 60);
 
