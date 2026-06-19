@@ -41,7 +41,7 @@
             @endforeach
         </table>
     </div>
-    <form action="/admin/export" class="export-form">
+    <form action="{{ route('admin.attendance.export', ['user_id' => $user->id] + request()->query()) }}" method="post" class="export-form">
         @csrf
         @foreach(request()->query() as $key => $value)
         <input type="hidden" name="{{ $key }}" value="{{ $value }}">

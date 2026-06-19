@@ -50,12 +50,14 @@ Route::middleware(['auth', AdminOnly::class , 'verified'])->group(function () {
         Route::get('/staff/list', [AdminStaffController::class, 'index'])->name('staff.list');
 
         Route::get('/attendance/staff/{user_id}', [AdminAttendanceController::class, 'monthIndex'])->name('attendance.month');
+
+        Route::post('/attendance/staff/{user_id}/export', [AdminAttendanceController::class, 'export'])->name('attendance.export');
     });
 
     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}',  [AdminApprovalController::class, 'show'])->name('approval.detail');
 
     Route::patch('/stamp_correction_request/approve/{attendance_correct_request_id}',  [AdminApprovalController::class, 'update'])->name('approval.update');
-    });
+});
 
 //共通ミドルウェア
 Route::middleware(['auth','verified'])->group(function () {

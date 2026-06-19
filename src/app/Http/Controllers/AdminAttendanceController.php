@@ -12,6 +12,7 @@ use App\Models\Attendance;
 use App\Models\Rest;
 use App\Models\ApprovalRequest;
 use App\Http\Requests\AdminAttendanceRequest;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminAttendanceController extends Controller
 {
@@ -177,5 +178,52 @@ class AdminAttendanceController extends Controller
         $nextMonth = $targetMonth->copy()->addMonth()->format('Y-m');
 
         return view('admin.each_attendance_list', compact('user','attendanceList', 'targetMonth', 'prevMonth', 'nextMonth'));
+    }
+
+    public function export($id, Request $request)
+    {
+        $query = Attendance::with('user')->where('user_id', $id);
+
+        // URLに ?month=2026-06 があれば絞り込む
+        if ($request->has('month')) {
+            $query->where('start_at', 'like', $request->month . '%');
+        }
+
+        $attendances = $query->get();
+
+        // ★追加：名前を取得する
+        // 取得したレコードの最初の1件から、紐づくユーザーの名前を取得します
+        // 万が一、該当月の勤怠データが1件もない場合の対策（フォールバック）も入れておきます
+        $firstRecord = $attendances->first();
+        $userName = $firstRecord && $firstRecord->user ? $firstRecord->user->name : 'user_' . $id;
+
+        // 2. CSVを生成してストリームとして返す（先ほどと同様の処理）
+        $response = new StreamedResponse(function () use ($attendances) {
+            $stream = fopen('php://output', 'w');
+            
+            // Excel文字化け防止のBOM
+            fwrite($stream, pack('C*', 0xEF, 0xBB, 0xBF));
+
+            // ヘッダー
+            fputcsv($stream, ['日付', '出勤時間', '退勤時間']);
+
+            // データ書き込み
+            foreach ($attendances as $attendance) {
+                fputcsv($stream, [
+                    $attendance->start_at->format('Y-m-d'),
+                    $attendance->start_at->format('H:i'),
+                    $attendance->finish_at->format('H:i'),
+                ]);
+            }
+
+            fclose($stream);
+        });
+
+        $response->headers->set('Content-Type', 'text/csv');
+        // ファイル名にユーザーIDや月を含めると親切です
+        $fileName = "attendance_{$userName}_" . ($request->month ?? now()->format('Y-m')) . ".csv";
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+
+        return $response;
     }
 }
