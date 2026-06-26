@@ -17,19 +17,25 @@ class AttendanceRecordResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            
+            'user_name' => optional($this->user)->name,
+
             // 🌟 日時カラムを日本時間のフォーマット（YYYY-MM-DD HH:mm:ss）に変換
             // ※ご自身のテーブルのカカラム名（punch_in_timeなど）に合わせて書き換えてください
-            'start_at' => $this->start_at ? $this->start_at->format('Y-m-d H:i:s') : null,
-            'finish_at' => $this->finish_at ? $this->finish_at->format('Y-m-d H:i:s') : null,
+            'date' => $this->start_at ? $this->start_at->format('Y-m-d') : null,
+            'clock_in' => $this->start_at ? $this->start_at->format('H:i:s') : null,
+            'clock_out' => $this->finish_at ? $this->finish_at->format('H:i:s') : null,
+
+            'comment'    => $this->reason,
             
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-            
+            // 2. 🌟 Attendance.php に書いたアクセサ（計算結果）を呼び出す
+            // ※アクセサ名が getTotalWorkTimeAttribute なら、$this->total_work_time で呼べます
+            'total_time' => $this->actual_work_time, 
+
+            // 🌟 修正：モデルの getDisplayTotalRestTimeAttribute() を呼び出す
+            'total_break_time' => $this->display_total_rest_time,
             // 関連データ（リレーション）もそのまま含める
-            'user' => $this->whenLoaded('user'),
-            'rests' => $this->whenLoaded('rests'),
-            'approvalRequests' => $this->whenLoaded('approvalRequests'),
+            'breaks' => $this->whenLoaded('rests'),
+            'application' => $this->whenLoaded('approvalRequests'),
         ];
     }
 }

@@ -23,6 +23,13 @@ class AttendanceRecordController extends Controller
         ->when($request->user_id, function ($query, $userId) {
             return $query->where('user_id', $userId);
         })
+        ->when($request->user_name, function ($query, $userName) {
+            // 🌟 users リレーション先のテーブルに対して条件を指定する
+            return $query->whereHas('user', function ($subQuery) use ($userName) {
+            // ※ 'name' の部分は、usersテーブルの実際の名前カラム名（name や user_name など）に合わせてください
+            return $subQuery->where('name', 'like', '%' . $userName . '%');
+            });
+        })
         ->when($request->date, function ($query, $date) {
             return $query->whereDate('start_at', $date);
         })
@@ -40,23 +47,47 @@ class AttendanceRecordController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function show(Attendance $attendanceRecord)
-    {
-        $attendanceRecord->load(['user', 'rests', 'approvalRequests']);
-        
-        return new AttendanceRecordResource($attendanceRecord);
+    public function show($id)
+{
+    // 1. 🌟 データベースからIDで検索し、なければ自分で404エラー（JSON）を即座に返す！
+    // ※モデル名が Attendance の前提です。ご自身の環境に合わせてください。
+    $attendanceRecord = Attendance::find($id);
+
+    if (!$attendanceRecord) {
+        return response()->json([
+            'message' => '勤怠情報が見つかりませんでした。'
+        ], 404);
     }
+
+    // 2. 存在した場合は、関連テーブルを一気にロードして Resource で返却（あなたの元のコードです！）
+    $attendanceRecord->load(['user', 'rests', 'approvalRequests']);
+    
+    return new AttendanceRecordResource($attendanceRecord);
+}
 
     /**
      * Display the specified resource.
      */
     public function store(StoreAttendanceRecordRequest $request)
     {
-        $validated = $request->validated();
+        if (!$request->user()) {
+        return response()->json([
+            'message' => '認証されていません。再ログインしてください。'
+        ], 401);
+    }
 
-        // 2. 🌟 認証ユーザーから user_id を自動付与して勤怠データを作成
-        // ※リレーション名が attendances の場合は書き換えてください
-        $attendanceRecord = $request->user()->attendances()->create($validated);
+        $startDateTime = $request->date . ' ' . $request->clock_in;
+
+        $finishDateTime = null;
+        if ($request->clock_out) {
+            $finishDateTime = $request->date . ' ' . $request->clock_out;
+        }
+
+        $attendanceRecord = $request->user()->attendances()->create([
+            'start_at'  => $startDateTime,
+            'finish_at' => $finishDateTime,
+            'comment'   => $request->reason,
+        ]);
 
         // 3. 🌟 作成後に関連データを eager load
         $attendanceRecord->load(['user', 'rests']);
