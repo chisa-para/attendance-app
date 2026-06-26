@@ -16,7 +16,7 @@ Route::apiResource('v1/attendance', AttendanceRecordController::class);
 
 Route::prefix('v1')->group(function () {
     Route::get('attendance-records', [AttendanceRecordController::class, 'index']);
-    Route::get('attendance-records/{id}', [AttendanceRecordController::class, 'show']);
+    Route::get('attendance-records/{attendanceRecord}', [AttendanceRecordController::class, 'show']);
 
     // トークン（Sanctum）必要
     Route::middleware('auth:sanctum')->group(function () {

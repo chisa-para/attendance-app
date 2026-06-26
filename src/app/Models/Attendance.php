@@ -30,6 +30,10 @@ class Attendance extends Model
     return $this->hasMany(Rest::class);
     }
 
+    public function approvalRequests(){
+        return $this->hasMany(ApprovalRequest::class);
+    }
+
     /**
      * 休憩時間（文字列）を計算するアクセサ
      */
