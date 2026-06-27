@@ -74,3 +74,4 @@ php artisan key:generate --env=testing
 - Webサーバー：nginx 1.30.1
 
 ## 8.ER図
+<img width="1360" height="882" alt="index drawio" src="https://github.com/user-attachments/assets/8a92a99d-bfca-4f80-bb31-3ad0059b886c" />
