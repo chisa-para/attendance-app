@@ -45,17 +45,17 @@ class AttendanceRecordPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Attendance $attendance): bool
+    public function update(User $user, Attendance $attendanceRecord): bool
     {
-        return $user->id === $attendance->user_id;
+        return $user->id === $attendanceRecord->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Attendance $attendance): bool
+    public function delete(User $user, Attendance $attendanceRecord): bool
     {
-        return $user->id === $attendance->user_id;
+        return $user->id === $attendanceRecord->user_id;
     }
 
     /**

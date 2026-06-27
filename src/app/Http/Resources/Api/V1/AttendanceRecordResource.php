@@ -25,7 +25,7 @@ class AttendanceRecordResource extends JsonResource
             'clock_in' => $this->start_at ? $this->start_at->format('H:i:s') : null,
             'clock_out' => $this->finish_at ? $this->finish_at->format('H:i:s') : null,
 
-            'comment'    => $this->reason,
+            'comment'    => $this->retouch_reason,
             
             // 2. 🌟 Attendance.php に書いたアクセサ（計算結果）を呼び出す
             // ※アクセサ名が getTotalWorkTimeAttribute なら、$this->total_work_time で呼べます

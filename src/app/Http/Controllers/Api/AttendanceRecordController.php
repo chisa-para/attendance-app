@@ -8,7 +8,9 @@ use App\Models\User;
 use App\Models\Attendance;
 use App\Http\Requests\Api\V1\IndexAttendanceRecordRequest;
 use App\Http\Requests\Api\V1\StoreAttendanceRecordRequest;
+use App\Http\Requests\Api\V1\UpdateAttendanceRecordRequest;
 use App\Http\Resources\Api\V1\AttendanceRecordResource;
+use Illuminate\Support\Facades\Gate;
 
 class AttendanceRecordController extends Controller
 {
@@ -101,16 +103,71 @@ class AttendanceRecordController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        Gate::authorize('update', $attendanceRecord);
+    public function update(UpdateAttendanceRecordRequest $request, $id)
+{
+    // 1. 🌟 対象の勤怠レコードを取得（なければ404）
+    $attendanceRecord = Attendance::find($id);
+
+    if (!$attendanceRecord) {
+        return response()->json([
+            'message' => '勤怠情報が見つかりませんでした。'
+        ], 404);
     }
+
+    // 2. 🌟 要件の指示：Policyを呼び出して、本人かどうかの「認可」チェック（ダメなら自動で403）
+    //$this->authorize('update', $attendanceRecord);
+    Gate::authorize('update', $attendanceRecord);
+
+    // 3. バリデーション済みの安全なデータを取得
+    $validated = $request->validated();
+
+    // 4. 🌟 送られてきた日付と時刻を結合して日時にする
+    $startDateTime = $request->date . ' ' . $request->clock_in;
+    $finishDateTime = null;
+    if ($request->clock_out) {
+        $finishDateTime = $request->date . ' ' . $request->clock_out;
+    }
+
+    // 5. 🌟 要件の指示：レコードを更新する
+    $attendanceRecord->update([
+        'start_at'  => $startDateTime,
+        'finish_at' => $finishDateTime,
+        'retouch_reason'   => $request->comment, // データベース側のカラム名に合わせて指定してください
+    ]);
+
+    // 6. 🌟 要件の指示：更新後に関連データをロードして Resource を返す
+    $attendanceRecord->load(['user', 'rests']); // ※要件の「breaks」は実環境の「rests」に合わせます
+
+    return new AttendanceRecordResource($attendanceRecord);
+}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        Gate::authorize('delete', $attendanceRecord);
+    public function destroy($id)
+{
+    // 1. 🌟 対象の勤怠レコードを取得（なければ404）
+    $attendanceRecord = Attendance::find($id);
+
+    if (!$attendanceRecord) {
+        return response()->json([
+            'error' => '勤怠情報が見つかりませんでした。' // 🔑 要件指定のキー名「error」
+        ], 404);
     }
+
+    // 2. 🌟 要件の指示：Policyを呼び出して「認可」チェック
+    // 認可失敗時に要件通りのメッセージ（error）と403を返したいため、例外をキャッチするか Gate::allows を使います
+    if (Gate::denies('delete', $attendanceRecord)) {
+        return response()->json([
+            'error' => 'この操作を実行する権限がありません。' // 🔑 要件指定のメッセージ
+        ], 403);
+    }
+
+    // 3. 🌟 要件の指示：レコードを削除する
+    // データベース側で ON DELETE CASCADE が設定されているため、紐づく関連データも自動で連動削除されます
+    $attendanceRecord->delete();
+
+    // 4. 🌟 成功時は 204 No Content（ボディなし）を返す
+    return response()->noContent();
+}
 }

@@ -3,6 +3,10 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Attendance;
+use App\Policies\AttendanceRecordPolicy;
+
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,4 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->booting(function () {
+        Gate::policy(Attendance::class, AttendanceRecordPolicy::class);
+    })
+    ->create();
+
+
+    
