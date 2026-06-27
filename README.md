@@ -1,4 +1,4 @@
-# test_contact-form
+# attendance-app
 
 # COACHTECH勤怠管理アプリ
 
@@ -17,25 +17,22 @@ Laravel環境構築
 2. `docker-compose exec php bash`
 3. `composer install` 
 4. `php artisan key:generate`
-5. `php artisan migrate --seed`
-   ※エラー等でもし途中でやり直したい場合は、下記を実行してください
+5. `php artisan migrate --seed`<br>
+   ※エラー等でもし途中でやり直したい場合は、下記を実行してください<br>
    `php artisan migrate:fresh --seed`
 
 ## 3. 開発環境
 
-新規登録ページ(一般):http://localhost/register
-ログインページ(一般):http://localhost/login
-ログインページ（管理者）:http://localhost/admin/login
+- 新規登録ページ(一般):http://localhost/register
+- ログインページ(一般):http://localhost/login
+- ログインページ（管理者）:http://localhost/admin/login
 
 下記ユーザーのアカウントと出品商品が登録されています。
-　- 西怜奈
-　　（メールアドレス＝user1@example.com、パスワード＝password1）
-　- 山田太郎
-　　（メールアドレス＝user2@example.com、パスワード＝password2）
-　- 管理秀一
-　　（メールアドレス＝user3@example.com、パスワード＝password3）
+- 西怜奈（メールアドレス＝user1@example.com、パスワード＝password1）
+- 山田太郎（メールアドレス＝user2@example.com、パスワード＝password2）
+- 管理秀一（メールアドレス＝user3@example.com、パスワード＝password3）
 
-phpMyAdmin:http://localhost:8080/
+- phpMyAdmin:http://localhost:8080/
 
 ## 4. メール認証について
 本プロジェクトは新規ユーザー登録の際メール認証システムを使用します。
@@ -55,18 +52,18 @@ php artisan key:generate --env=testing
 3. テストの実行
 `php phpunit`
 
-※もし .env の変更が反映されない場合や、挙動がおかしい場合は、一度以下のコマンドで設定キャッシュをクリアしてください。
+※もし .env の変更が反映されない場合や、挙動がおかしい場合は、一度以下のコマンドで設定キャッシュをクリアしてください。<br>
 `php artisan config:clear`
 
 ※テストの実装は要件シートのID1～7、16までしか実装できませんでした。
 
 ## 6. 提出にあたっての備考
-・勤怠記録機能において、出勤日から日をまたいでの退勤は想定していません。
 
-・勤怠一覧表示画面にて、出勤していない日の「詳細」ボタンはページ遷移しません。
+- 勤怠記録機能において、出勤日から日をまたいでの退勤は想定していません。
 
-・勤怠一覧取得APIについて
-　パラメータにdate、monthを同時に指定した場合はdateかつmonth両方を満たすデータが検索されます。
+- 勤怠一覧表示画面にて、出勤していない日の「詳細」ボタンはページ遷移しません。
+
+- 勤怠一覧取得APIについて、パラメータにdate、monthを同時に指定した場合はdateかつmonth両方を満たすデータが検索されます。
 
 ## 7. 使用技術（実行環境）
 
@@ -77,5 +74,3 @@ php artisan key:generate --env=testing
 - Webサーバー：nginx 1.30.1
 
 ## 8.ER図
-![alt text](index.drawio.png)
-
