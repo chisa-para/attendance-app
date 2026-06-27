@@ -30,11 +30,20 @@
         <input name="password" id="password" type="password" class="auth__input">
         <div class="form__error">
             @error('password')
-            {{ $message }}
+                @if(!Str::contains($message, '一致'))
+                    {{ $message }}
+                @endif
             @enderror
         </div>
         <label for="password_confirm" class="entry__name">確認用パスワード</label>
         <input name="password_confirmation" id="password_confirm" type="password" class="auth__input">
+        <div class="form__error">
+            @error('password')
+                @if(Str::contains($message, '一致'))
+                    {{ $message }}
+                @endif
+            @enderror
+        </div>
         <button class="auth__button">登録する</button>
     </form>
 

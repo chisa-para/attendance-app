@@ -9,7 +9,7 @@
 <div class="attendance-detail__content">
     <h1 class="attendance-detail__heading">勤怠詳細</h1>
     <div class="attendance-detail-form">
-        <form action="{{ route('attendance.change', ['attendance_id' => $attendance['id']]) }}" class="form" method="post">
+        <form action="{{ route('attendance.change', ['attendance_id' => $attendance['id']]) }}" class="form" method="post" novalidate>
             @csrf
             
             <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
@@ -64,7 +64,7 @@
                 <tr class="table__row">
                     <th class="table__head">備考</th>
                     <td class="table__data">
-                        @if(!$retouch_reason)
+                        @if(!$attendance->retouch_reason)
                         <textarea type="text" class="detail__textarea" name="reason" cols="57" rows="10" placeholder="修正理由を記述してください" >{{ old('reason') }}</textarea>
                         <div class="form__error" style="color: red; padding: 10px;">
                             @error('reason')
@@ -72,7 +72,7 @@
                             @enderror
                         </div>
                         @else
-                        <textarea type="text" class="detail__textarea" name="reason" cols="57" rows="10" placeholder="修正理由を記述してください" >{{ old('reason') }}</textarea>
+                        <textarea type="text" class="detail__textarea" name="reason" cols="57" rows="10" >{{ old('reason',$attendance->retouch_reason) }}</textarea>
                         @endif
                     </td>
                 </tr>

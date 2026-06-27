@@ -22,16 +22,13 @@ class ApprovalRequestStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'attendance_id' => ['required','exists:attendances,id'],
             'request_start_at'  => ['required','date_format:H:i','before:request_finish_at'],
             'request_finish_at' => ['required','date_format:H:i','after:request_start_at'],
-            'reason'              => ['required','string'],
+            'reason'              => ['required'],
 
         // ーーー 休憩データの配列バリデーション ーーー
-            'rests'                                 => ['required','array'],
-            'rests.*.id'                            => ['nullable','integer'], // 元の休憩レコードID
-            'rests.*.request_rest_start_at'         => ['nullable','required_with:rests.*.request_rest_finish_at','date_format:H:i','after:request_start_at','before:rests.*.request_rest_finish_at','before:request_finish_at'],
-            'rests.*.request_rest_finish_at'        => ['nullable','required_with:rests.*.request_rest_start_at','date_format:H:i','after:rests.*.request_rest_start_at','before:request_finish_at'],
+            'rests.*.request_rest_start_at'         => ['nullable','required_with:rests.*.request_rest_finish_at','date_format:H:i','after:request_start_at','before:request_finish_at'],
+            'rests.*.request_rest_finish_at'        => ['nullable','required_with:rests.*.request_rest_start_at','date_format:H:i','before:request_finish_at'],
         ];
     }
 
@@ -56,7 +53,6 @@ class ApprovalRequestStoreRequest extends FormRequest
             
             'rests.*.request_rest_finish_at.required_with'    => '休憩終了時間を入力してください。',
             'rests.*.request_rest_finish_at.date_format'    => '休憩時間は「時:分」の形式で入力してください。',
-            'rests.*.request_rest_finish_at.after'    => '休憩時間が不適切な値です',
             'rests.*.request_rest_finish_at.before'    => '休憩時間もしくは退勤時間が不適切な値です',
         ];
     }

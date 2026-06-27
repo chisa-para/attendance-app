@@ -59,7 +59,13 @@
                 </tr>
             </table>
             <div class="form-button">
-                <button class="approval-button">承認</button>
+                @if($approvalRequest->status === 'waiting')
+                    <button class="approval-button">承認</button>
+                @else
+                    <div class="approval-button__approved" style="color: red; font-weight: bold; margin-top: 15px;">
+                    承認済み
+                </div>
+                @endif
             </div>
         </form>
     </div>
