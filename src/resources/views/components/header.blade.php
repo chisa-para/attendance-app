@@ -1,8 +1,6 @@
 <header class="header">  
     <div class="header-logo-group">
-        <a href="/" class="header-logo-link">
-            <img src="{{ asset('images/COACHTECHヘッダーロゴ.png') }}" alt="COACHTECH" class="logo-image">
-        </a>
+        <img src="{{ asset('images/COACHTECHヘッダーロゴ.png') }}" alt="COACHTECH" class="logo-image">    
     </div>
     @if( !in_array(Route::currentRouteName(), ['register', 'login', 'verification.notice']) )
     <nav class="header__navi">

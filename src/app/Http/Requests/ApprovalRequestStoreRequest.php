@@ -19,6 +19,7 @@ class ApprovalRequestStoreRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
         return [
@@ -27,8 +28,19 @@ class ApprovalRequestStoreRequest extends FormRequest
             'reason'              => ['required'],
 
         // ーーー 休憩データの配列バリデーション ーーー
-            'rests.*.request_rest_start_at'         => ['nullable','required_with:rests.*.request_rest_finish_at','date_format:H:i','after:request_start_at','before:request_finish_at'],
-            'rests.*.request_rest_finish_at'        => ['nullable','required_with:rests.*.request_rest_start_at','date_format:H:i','before:request_finish_at'],
+            'rests.*.request_rest_start_at'         => [
+                'nullable',
+                'required_with:rests.*.request_rest_finish_at',
+                'date_format:H:i',
+                'after:request_start_at',
+                'before:request_finish_at'],
+
+            'rests.*.request_rest_finish_at'        => [
+                'nullable',
+                'required_with:rests.*.request_rest_start_at',
+                'date_format:H:i',
+                'after:rests.*.request_rest_start_at',
+                'before:request_finish_at'],
         ];
     }
 
