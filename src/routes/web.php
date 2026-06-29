@@ -73,8 +73,8 @@ Route::get('/email/verify', function () {
 
 // 2. メール内のリンクをクリックした時の処理（検証完了）
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill(); // これが認証完了の魔法のメソッドです
-    return redirect('/attendance'); // 💡 認証後に飛ばしたい場所（マイページなど）に変更してください
+    $request->fulfill();
+    return redirect('/attendance');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 // 3. 認証メールの再送処理

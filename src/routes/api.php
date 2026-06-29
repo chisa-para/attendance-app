@@ -28,14 +28,13 @@ Route::prefix('v1')->group(function () {
 });
 
 Route::post('v1/login', function (Request $request) {
-    //本来はパスワードチェックをしますが、テスト用にメールアドレスだけでトークンを発行しちゃいます
     $user = \App\Models\User::where('email', $request->email)->first();
     
     if (!$user) {
         return response()->json(['message' => 'ユーザーが見つかりません'], 401);
     }
 
-    //トークンを発行する（Sanctumの機能）
+    //トークンを発行する
     $token = $user->createToken('auth_token')->plainTextToken;
 
     return response()->json([
