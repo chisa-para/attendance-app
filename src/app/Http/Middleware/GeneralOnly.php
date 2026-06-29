@@ -19,7 +19,7 @@ class GeneralOnly
             return redirect('/login');
         }
 
-        // 💡 ログインしているが、管理者(true)だった場合は一般画面から閉め出す
+        // ログインしているが、管理者(true)だった場合は一般画面から閉め出す
         if (auth()->user()->admin_status) {
             return redirect('/admin/attendance/list'); // 管理者トップへ強制移動
         }

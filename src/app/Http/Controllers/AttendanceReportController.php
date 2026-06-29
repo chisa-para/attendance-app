@@ -11,7 +11,8 @@ use App\Models\Rest;
 
 class AttendanceReportController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $user = Auth::user();
 
         //6ケ月前の1日から

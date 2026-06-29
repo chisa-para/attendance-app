@@ -114,24 +114,24 @@ class AdminAttendanceController extends Controller
         $monthParam = $request->input('month', Carbon::now()->format('Y-m'));
         $targetMonth = Carbon::parse($monthParam);
 
-        // 2. ログインユーザーの指定月の勤怠データを取得
+        // ログインユーザーの指定月の勤怠データを取得
         $attendances = Attendance::with('rests')
             ->where('user_id', $id)
             ->whereYear('start_at', $targetMonth->year)
             ->whereMonth('start_at', $targetMonth->month)
             ->get()
-            // 日付（Y-m-d形式）をキーにしたコレクションに変換しておく（ここがポイント！）
+            // 日付（Y-m-d形式）をキーにしたコレクションに変換
             ->keyBy(function ($attendance) {
                 return Carbon::parse($attendance->start_at)->format('Y-m-d');
             });
 
-        // 3. 1日〜末日までの全日付ループ用の器（配列）を用意
+        // 1日〜末日までの全日付ループ用の器（配列）を用意
         $attendanceList = [];
         $daysInMonth = $targetMonth->daysInMonth; // その月の日数（28〜31）
         $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
-            // ループ処理中の日付インスタンスを作成（例: 2026-05-01）
+            // ループ処理中の日付インスタンスを作成
             $currentDate = $targetMonth->copy()->day($day);
             $dateKey = $currentDate->format('Y-m-d'); // 検索用のキー
             $dayOfWeek = $weekdays[$currentDate->dayOfWeek]; // 曜日
@@ -144,10 +144,10 @@ class AdminAttendanceController extends Controller
                 'finish_at' => '',
                 'rest_time' => '',
                 'working_time' => '',
-                'is_weekend' => $currentDate->isWeekend(), // 土日判定（CSS装飾用）
+                'is_weekend' => $currentDate->isWeekend(),
             ];
 
-            // 4. 【マッピング処理】DBから取得したデータ（$attendances）の中に、該当する日付のデータがあるか確認
+            // 【マッピング処理】DBから取得したデータ（$attendances）の中に、該当する日付のデータがあるか確認
             if ($attendances->has($dateKey)) {
                 $attendance = $attendances->get($dateKey);
                 $start = Carbon::parse($attendance->start_at);
@@ -181,86 +181,83 @@ class AdminAttendanceController extends Controller
     }
 
     public function export($id, Request $request)
-{
-    // 1. ユーザー情報と対象月を取得（monthIndexと全く同じ）
-    $user = User::findOrFail($id);
-    $monthParam = $request->input('month', Carbon::now()->format('Y-m'));
-    $targetMonth = Carbon::parse($monthParam);
+    {
+        $user = User::findOrFail($id);
+        $monthParam = $request->input('month', Carbon::now()->format('Y-m'));
+        $targetMonth = Carbon::parse($monthParam);
 
-    // 2. 指定指定月の勤怠データを取得
-    $attendances = Attendance::with('rests')
-        ->where('user_id', $id)
-        ->whereYear('start_at', $targetMonth->year)
-        ->whereMonth('start_at', $targetMonth->month)
-        ->get()
-        ->keyBy(function ($attendance) {
-            return Carbon::parse($attendance->start_at)->format('Y-m-d');
-        });
+        // 指定指定月の勤怠データを取得
+        $attendances = Attendance::with('rests')
+            ->where('user_id', $id)
+            ->whereYear('start_at', $targetMonth->year)
+            ->whereMonth('start_at', $targetMonth->month)
+            ->get()
+            ->keyBy(function ($attendance) {
+                return Carbon::parse($attendance->start_at)->format('Y-m-d');
+            });
 
-    // 3. ストリームレスポンスでCSVを生成してダウンロードさせる
-    $response = new StreamedResponse(function () use ($user, $targetMonth, $attendances) {
-        $stream = fopen('php://output', 'w');
-        
-        // Excel文字化け防止のBOMを追加
-        fwrite($stream, pack('C*', 0xEF, 0xBB, 0xBF));
+        // ストリームレスポンスでCSVを生成してダウンロードさせる
+        $response = new StreamedResponse(function () use ($user, $targetMonth, $attendances) {
+            $stream = fopen('php://output', 'w');
+            // Excel文字化け防止のBOM
+            fwrite($stream, pack('C*', 0xEF, 0xBB, 0xBF));
+            // CSVのヘッダー行
+            fputcsv($stream, ['日付', '出勤時間', '退勤時間', '休憩時間合計', '労働時間合計']);
 
-        // CSVのヘッダー行（ご希望の5項目）
-        fputcsv($stream, ['日付', '出勤時間', '退勤時間', '休憩時間合計', '労働時間合計']);
+            $daysInMonth = $targetMonth->daysInMonth;
+            $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
 
-        $daysInMonth = $targetMonth->daysInMonth;
-        $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+            // 1日〜末日までの全日付をループしながらCSVに書き込む
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $currentDate = $targetMonth->copy()->day($day);
+                $dateKey = $currentDate->format('Y-m-d');
+                $dayOfWeek = $weekdays[$currentDate->dayOfWeek];
 
-        // 4. 1日〜末日までの全日付をループしながらCSVに書き込む
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $currentDate = $targetMonth->copy()->day($day);
-            $dateKey = $currentDate->format('Y-m-d');
-            $dayOfWeek = $weekdays[$currentDate->dayOfWeek];
+                // デフォルト値（データがない日の空欄データ）
+                $dateStr = $currentDate->format('m/d') . "({$dayOfWeek})";
+                $startAt = '';
+                $finishAt = '';
+                $restTime = '';
+                $workingTime = '';
 
-            // デフォルト値（データがない日の空欄データ）
-            $dateStr = $currentDate->format('m/d') . "({$dayOfWeek})";
-            $startAt = '';
-            $finishAt = '';
-            $restTime = '';
-            $workingTime = '';
+                // DBにデータが存在する場合、値を上書き（マッピング）
+                if ($attendances->has($dateKey)) {
+                    $attendance = $attendances->get($dateKey);
+                    $start = Carbon::parse($attendance->start_at);
+                    $finish = $attendance->finish_at ? Carbon::parse($attendance->finish_at) : null;
 
-            // DBにデータが存在する場合、値を上書き（マッピング）
-            if ($attendances->has($dateKey)) {
-                $attendance = $attendances->get($dateKey);
-                $start = Carbon::parse($attendance->start_at);
-                $finish = $attendance->finish_at ? Carbon::parse($attendance->finish_at) : null;
+                    // 休憩時間
+                    $totalRestMinutes = $attendance->total_rest_minutes;
+                    $restTime = sprintf('%02d:%02d', floor($totalRestMinutes / 60), $totalRestMinutes % 60);
 
-                // 休憩時間
-                $totalRestMinutes = $attendance->total_rest_minutes;
-                $restTime = sprintf('%02d:%02d', floor($totalRestMinutes / 60), $totalRestMinutes % 60);
+                    // 実働時間
+                    $workingTime = $attendance->actual_work_time;
 
-                // 実働時間
-                $workingTime = $attendance->actual_work_time;
+                    // 各項目を文字列にフォーマット
+                    $startAt = $start->format('H:i');
+                    $finishAt = $finish ? $finish->format('H:i') : '勤怠中';
+                }
 
-                // 各項目を文字列にフォーマット
-                $startAt = $start->format('H:i');
-                $finishAt = $finish ? $finish->format('H:i') : '勤怠中';
+                // CSVに1行分を書き込み
+                fputcsv($stream, [
+                    $dateStr,     // 日付
+                    $startAt,     // 出勤時間
+                    $finishAt,    // 退勤時間
+                    $restTime,    // 休憩時間合計
+                    $workingTime, // 労働時間合計
+                ]);
             }
 
-            // CSVに1行分を書き込み
-            fputcsv($stream, [
-                $dateStr,     // 日付 (例: 06/01(月))
-                $startAt,     // 出勤時間
-                $finishAt,    // 退勤時間
-                $restTime,    // 休憩時間合計
-                $workingTime, // 労働時間合計
-            ]);
-        }
-
-        fclose($stream);
-    });
-
-    // 5. レスポンスヘッダーの設定
-    $response->headers->set('Content-Type', 'text/csv');
+            fclose($stream);
+        });
+        
+        // レスポンスヘッダーの設定
+        $response->headers->set('Content-Type', 'text/csv');
     
-    // ファイル名： attendance_氏名_2026-06.csv
-    $fileName = "attendance_{$user->name}_{$targetMonth->format('Y-m')}.csv";
-    $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+        // ファイル名： attendance_氏名_2026-06.csv
+        $fileName = "attendance_{$user->name}_{$targetMonth->format('Y-m')}.csv";
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
 
-    return $response;
-}
+        return $response;
+    }
 }

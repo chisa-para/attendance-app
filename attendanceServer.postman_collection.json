@@ -1,0 +1,248 @@
+{
+  "info": {
+    "_postman_id": "d5cf46b7-d724-490c-ac7a-a5060577077a",
+    "name": "attendanceServer",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56048954"
+  },
+  "item": [
+    {
+      "name": "ログイン Request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "email",
+              "value": "user1@example.com",
+              "type": "text",
+              "uuid": "4237016f-f32f-45e1-8856-d87f7fc79a82"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost/api/v1/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "勤怠一覧取得",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "1|WnLlNhAjRAEislCaZpuBQzaDEtlFwaGGF5JQ1wI2de5c8482",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost/api/v1/attendance-records",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "attendance-records"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "勤怠詳細取得",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "1|WnLlNhAjRAEislCaZpuBQzaDEtlFwaGGF5JQ1wI2de5c8482",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost/api/v1/attendance-records/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "attendance-records",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "勤怠データ新規登録",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "1|WnLlNhAjRAEislCaZpuBQzaDEtlFwaGGF5JQ1wI2de5c8482",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"date\": \"2026-06-23\",\r\n    \"clock_in\": \"09:00:00\",\r\n    \"clock_out\": \"18:00:00\",\r\n    \"comment\": \"リモートワーク\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost/api/v1/attendance-records",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "attendance-records"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "勤怠データ更新",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "1|WnLlNhAjRAEislCaZpuBQzaDEtlFwaGGF5JQ1wI2de5c8482",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"date\": \"2026-06-23\",\r\n    \"clock_in\": \"10:00:00\",\r\n    \"clock_out\": \"18:00:00\",\r\n    \"comment\": \"健康診断のため\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost/api/v1/attendance-records/217",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "attendance-records",
+            "217"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "勤怠記録削除",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "1|WnLlNhAjRAEislCaZpuBQzaDEtlFwaGGF5JQ1wI2de5c8482",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost/api/v1/attendance-records/217",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "attendance-records",
+            "217"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": "https://d9405e1e-6141-4ef3-964c-f362e4c35b9e.mock.pstmn.io"
+    }
+  ]
+}

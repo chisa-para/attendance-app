@@ -23,7 +23,7 @@ class AttendanceFactory extends Factory
 
     public function definition(): array
     {
-        // デフォルト値（Seeder側で上書きするため、基本はプレースホルダーでOK）
+        // デフォルト値
         return [
             'user_id' => 1,
             'start_at' => Carbon::now(),

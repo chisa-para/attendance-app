@@ -111,7 +111,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::authenticateUsing(function (Request $request) {
-            // 1. 管理者ログイン
+            // 管理者ログイン
             if ($request->is('admin/*') || $request->is('admin')) {
                 $admin = User::where('email', $request->email)
                 ->whereIn('admin_status', [true, 1, 'true'])
@@ -128,7 +128,7 @@ class FortifyServiceProvider extends ServiceProvider
 
             } 
     
-            // 2. 一般ユーザーログイン
+            // 一般ユーザーログイン
             else {
                 $user = User::where('email', $request->email)
                 ->whereIn('admin_status', [false, 0, 'false'])

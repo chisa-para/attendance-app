@@ -16,7 +16,7 @@ class AdminOnly
     public function handle(Request $request, Closure $next): Response
     {
         if (!auth()->check() || !auth()->user()->admin_status) {
-            // 💡 管理者ログイン画面へ戻す
+            // 管理者ログイン画面へ戻す
             return redirect('/admin/login'); 
         }
         return $next($request);

@@ -55,12 +55,12 @@ class ApprovalRequestController extends Controller
             'request_start_at' => $validated['request_start_at'],
             'request_finish_at'=> $validated['request_finish_at'],
         ]);
-
-    // 2. フロントから送られてきた休憩データの配列をループ処理
-    // $request->rests は [ 0 => ['id' => 1, 'request_rest_start_at' => '12:00', ...], 1 => [...] ] のような構造で届きます
+        
+        // フロントから送られてきた休憩データの配列をループ処理
+        // $request->rests は [ 0 => ['id' => 1, 'request_rest_start_at' => '12:00', ...], 1 => [...] ] のような構造で届く
         if (!empty($validated['rests'])) {
             foreach ($validated['rests'] as $restData) {
-            // 開始時間と終了時間の両方が入力されている場合のみ保存する（空のフォーム対策）
+            // 開始時間と終了時間の両方が入力されている場合のみ保存
                 if (!empty($restData['request_rest_start_at']) && !empty($restData['request_rest_finish_at'])) {
                     ApprovalRest::create([
                         'approval_request_id'   => $approvalRequest->id,
@@ -79,7 +79,6 @@ class ApprovalRequestController extends Controller
         $status = $request->input('status', 'waiting');
         $keyword = $request->input('keyword');
 
-        // 2. 申請データをリレーションと一緒に取得（最新順）
         $query = ApprovalRequest::with(['attendance.user'])->latest();
 
         $query->where('status', $status);
@@ -90,14 +89,7 @@ class ApprovalRequestController extends Controller
         });
     }
 
-        // 3. もしキーワード（名前など）があれば絞り込み（必要に応じて実装してください）
-        if (!empty($keyword)) {
-            $query->whereHas('attendance.user', function($q) use ($keyword) {
-                $q->where('name', 'like', '%' . $keyword . '%');
-            });
-        }
-
-        // 4. データを取得（ページネーションにする場合は paginate(10) などに）
+        
         $requests = $query->get();
 
         

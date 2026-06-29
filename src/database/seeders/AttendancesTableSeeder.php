@@ -18,7 +18,7 @@ class AttendancesTableSeeder extends Seeder
     {
         $userId = 1; 
 
-        // 1.過去5ヶ月間の通常勤務
+        // 過去5ヶ月間の通常勤務
         for ($i = 5; $i >= 1; $i--) {
             $month = Carbon::now()->subMonths($i);
             $date = $month->copy()->startOfMonth();
@@ -44,7 +44,7 @@ class AttendancesTableSeeder extends Seeder
             }
         }
 
-        // 2.当月の勤務データ
+        // 当月の勤務データ
         $currentMonth = Carbon::now();
         $date = $currentMonth->copy()->startOfMonth();
         $endOfMonth = $currentMonth->copy()->endOfMonth();
@@ -108,12 +108,9 @@ class AttendancesTableSeeder extends Seeder
                 // 8:00〜22:00の間で、7時間〜12時間のランダムな勤務時間
                 $workingHours = rand(7, 12);
                 // 開始時間は 08:00 〜 (22:00 - 勤務時間) の間でランダムに決定
-                // 例: 12時間勤務なら 22 - 12 = 10 なので、開始は 08:00、09:00、10:00 のいずれかになる
                 $latestStartHour = 22 - $workingHours;
                 $startHour = rand(8, $latestStartHour);
 
-                // 分単位も少しバラつかせたい場合は rand(0, 1) * 30 などにできますが、
-                // 今回はシンプルに◯時00分スタートで計算します
                 $startAt = Carbon::parse("${d} " . sprintf('%02d:00:00', $startHour));
                 $finishAt = $startAt->copy()->addHours($workingHours);
 

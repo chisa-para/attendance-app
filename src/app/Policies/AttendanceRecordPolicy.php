@@ -37,7 +37,7 @@ class AttendanceRecordPolicy
      */
     public function before(User $user, string $ability)
     {
-        if ($user->admin_status) { // ※Userモデルに管理者フラグ（is_adminなど）がある想定
+        if ($user->admin_status) {
             return true;
         }
     }

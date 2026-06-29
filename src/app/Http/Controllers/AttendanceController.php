@@ -101,22 +101,22 @@ class AttendanceController extends Controller
 
     public function index(Request $request)
     {
-        // 1. 対象の月を取得（指定がなければ当月）
+        // 対象の月を取得（指定がなければ当月）
         $monthParam = $request->input('month', Carbon::now()->format('Y-m'));
         $targetMonth = Carbon::parse($monthParam);
 
-        // 2. ログインユーザーの指定月の勤怠データを取得
+        // ログインユーザーの指定月の勤怠データを取得
         $attendances = Attendance::with('rests')
             ->where('user_id', Auth::id())
             ->whereYear('start_at', $targetMonth->year)
             ->whereMonth('start_at', $targetMonth->month)
             ->get()
-            // 日付（Y-m-d形式）をキーにしたコレクションに変換しておく（ここがポイント！）
+            // 日付（Y-m-d形式）をキーにしたコレクションに変換しておく
             ->keyBy(function ($attendance) {
                 return Carbon::parse($attendance->start_at)->format('Y-m-d');
             });
 
-        // 3. 1日〜末日までの全日付ループ用の器（配列）を用意
+        // 1日〜末日までの全日付ループ用の器（配列）を用意
         $attendanceList = [];
         $daysInMonth = $targetMonth->daysInMonth; // その月の日数（28〜31）
         $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -138,7 +138,7 @@ class AttendanceController extends Controller
                 'is_weekend' => $currentDate->isWeekend(), // 土日判定（CSS装飾用）
             ];
 
-            // 4. 【マッピング処理】DBから取得したデータ（$attendances）の中に、該当する日付のデータがあるか確認
+            //【マッピング処理】DBから取得したデータ（$attendances）の中に、該当する日付のデータがあるか確認
             if ($attendances->has($dateKey)) {
                 $attendance = $attendances->get($dateKey);
                 $start = Carbon::parse($attendance->start_at);
