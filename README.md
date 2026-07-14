@@ -14,10 +14,11 @@ Dockerビルド
 
 Laravel環境構築
 1. `cp src/.env.example src/.env`
-2. `docker-compose exec php bash`
-3. `composer install` 
-4. `php artisan key:generate`
-5. `php artisan migrate --seed`<br>
+2. `cd attendance-app`
+3. `docker-compose exec php bash`
+4. `composer install` 
+5. `php artisan key:generate`
+6. `php artisan migrate --seed`<br>
    ※エラー等でもし途中でやり直したい場合は、下記を実行してください<br>
    `php artisan migrate:fresh --seed`
 
